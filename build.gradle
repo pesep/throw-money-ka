@@ -32,4 +32,6 @@ dependencies {
     compile('org.apache.commons:commons-lang3')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    annotationProcessor('org.projectlombok:lombok')
 }

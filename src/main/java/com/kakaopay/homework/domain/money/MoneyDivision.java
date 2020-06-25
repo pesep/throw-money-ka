@@ -18,7 +18,7 @@ public class MoneyDivision {
 
     private long dividedMoney;
 
-    private String moneyUserId;
+    private String receivedMoneyUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "token", referencedColumnName = "token")
