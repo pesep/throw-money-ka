@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class MoneyThrowApiApplication {
+public class ThrowMoneyApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MoneyThrowApiApplication.class, args);
+        SpringApplication.run(ThrowMoneyApiApplication.class, args);
     }
 }

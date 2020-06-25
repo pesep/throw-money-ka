@@ -22,6 +22,6 @@ public class MoneyDivision {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "token", referencedColumnName = "token")
-    private MoneyThrowDetail moneyThrowDetail;
+    private ThrowMoneyDetail throwMoneyDetail;
 
 }

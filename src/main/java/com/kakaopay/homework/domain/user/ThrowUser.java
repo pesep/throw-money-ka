@@ -11,8 +11,8 @@ import javax.persistence.IdClass;
 @Getter
 @Setter
 @Entity(name = "TmkMoneyUser")
-@IdClass(MoneyUserId.class)
-public class MoneyUser extends BaseTimeEntity {
+@IdClass(ThrowUserId.class)
+public class ThrowUser extends BaseTimeEntity {
 
     @Id
     private String UserId;

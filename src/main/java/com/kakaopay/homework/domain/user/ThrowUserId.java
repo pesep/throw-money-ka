@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = false)
-public class MoneyUserId implements Serializable {
+public class ThrowUserId implements Serializable {
 
     @Id
     private String UserId;

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "TmkMoneyThrowDetail")
-public class MoneyThrowDetail extends BaseTimeEntity {
+public class ThrowMoneyDetail extends BaseTimeEntity {
 
     @Id
     private String token;
@@ -21,7 +21,7 @@ public class MoneyThrowDetail extends BaseTimeEntity {
 
     private long totalMoney;
 
-    private int throwCount;
+    private int throwPeople;
 
     private boolean isComplete;
 
