@@ -94,18 +94,18 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
             throw new ErrorCodeException(ErrorCode.E0001);
         }
 
-        // 대화방에 소속되어 있는지 확인
+        // 대화방에 소속 되어 있는지 확인
         ThrowUser throwUser = throwUserRepository.findByUserIdAndChatRoomId(userId, chatRoomId);
         if (throwUser == null) {
             throw new ErrorCodeException(ErrorCode.E0002);
         }
 
-        // 뿌린 사람은 가져갈수 없음
+        // 뿌린 사람은 가져갈 수 없음
         if (throwMoneyDetail.getMoneyMaker().equals(userId)) {
             throw new ErrorCodeException(ErrorCode.E0003);
         }
 
-        // 한번 가져간 사람은 다시 가져갈수 없음
+        // 한번 가져간 사람은 다시 가져갈 수 없음
         MoneyDivision moneyDivision = new MoneyDivision();
         for (int i = 0; i < throwMoneyDetail.getMoneyDivisionList().size(); i++) {
             if (throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId() != null
@@ -113,13 +113,14 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
                 throw new ErrorCodeException(ErrorCode.E0004);
             }
 
+            // 받은 사람이 없는 건에서 조회
             if (throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId() == null) {
                 moneyDivision.setSeq(throwMoneyDetail.getMoneyDivisionList().get(i).getSeq());
                 moneyDivision.setToken(throwMoneyDetail.getMoneyDivisionList().get(i).getToken());
                 moneyDivision.setDividedMoney(throwMoneyDetail.getMoneyDivisionList().get(i).getDividedMoney());
                 break;
-            }
 
+            }
         }
 
         moneyDivision.setReceivedMoneyUserId(userId);
@@ -156,7 +157,6 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
         }
 
         GetThrowMoneyDetailResponseDTO getThrowMoneyDetailResponseDTO = new GetThrowMoneyDetailResponseDTO();
-
         getThrowMoneyDetailResponseDTO.setThrowDateTime(throwMoneyDetail.getCreatedDate());
         getThrowMoneyDetailResponseDTO.setThrowMoney(throwMoneyDetail.getTotalMoney());
 
@@ -166,6 +166,7 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
             if (!(throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId() == null)) {
                 receivedMoney += throwMoneyDetail.getMoneyDivisionList().get(i).getDividedMoney();
 
+                // 받은 사람만 조회
                 MoneyDivisionDTO moneyDivisionDTO = new MoneyDivisionDTO();
                 moneyDivisionDTO.setReceivedMoney(throwMoneyDetail.getMoneyDivisionList().get(i).getDividedMoney());
                 moneyDivisionDTO.setReceivedUserId(throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId());
@@ -178,11 +179,12 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
         return getThrowMoneyDetailResponseDTO;
     }
 
+    // 토큰 생성
     private String createToken() {
-
         return RandomStringUtils.randomAlphanumeric(3);
     }
 
+    // 인원수에 맞게 돈 나누기
     private long[] divisionMoney(int people, long divisionMoney) {
 
         long[] divisionMoneyGroup = new long[people];

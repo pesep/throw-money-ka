@@ -12,6 +12,14 @@ public class ThrowMoneyController {
     @Autowired
     private ThrowMoneyService throwMoneyService;
 
+    /**
+     * 머니 뿌리기
+     *
+     * @param userId
+     * @param chatRoomId
+     * @param throwMoneyRequestDTO
+     * @return
+     */
     @PostMapping("/money/throw")
     public ResponseEntity<?> throwMoney(
             @RequestHeader(name = "X-USER-ID") String userId,
@@ -22,6 +30,14 @@ public class ThrowMoneyController {
 
     }
 
+    /**
+     * 머니 받기
+     *
+     * @param userId
+     * @param chatRoomId
+     * @param token
+     * @return
+     */
     @PostMapping("/money/get/{token}")
     public ResponseEntity<?> getMoney(
             @RequestHeader(name = "X-USER-ID") String userId,
@@ -32,6 +48,14 @@ public class ThrowMoneyController {
 
     }
 
+    /**
+     * 머니 뿌리기 조회
+     *
+     * @param userId
+     * @param chatRoomId
+     * @param token
+     * @return
+     */
     @GetMapping("/money/get/{token}")
     public ResponseEntity<?> getThrowMoneyDetail(
             @RequestHeader(name = "X-USER-ID") String userId,
@@ -39,6 +63,7 @@ public class ThrowMoneyController {
             @PathVariable String token) {
 
         return ResponseEntity.ok(throwMoneyService.getThrowMoneyDetail(userId, chatRoomId, token));
+
     }
 
 }

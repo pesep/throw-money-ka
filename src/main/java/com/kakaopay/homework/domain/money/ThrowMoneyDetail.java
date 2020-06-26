@@ -24,13 +24,7 @@ public class ThrowMoneyDetail extends BaseTimeEntity {
 
     private int throwPeople;
 
-//    @Type(type = "yes_no")
-//    @Column(length = 1, name = "completeYn")
-//    @ColumnDefault("'N'")
-//    private boolean isComplete;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "throwMoneyDetail")
-//    @Where(clause = "received_money_user_id is not null")
     private List<MoneyDivision> moneyDivisionList;
 
 
