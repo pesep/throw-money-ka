@@ -33,7 +33,7 @@ public class MoneyDivisionRepositoryTest {
         long dividedMoney = 39;
         String receivedMoneyUserId = "steve";
 
-        moneyDivision.setMoneyThrowToken(moneyThrowToken);
+        moneyDivision.setToken(moneyThrowToken);
         moneyDivision.setDividedMoney(dividedMoney);
         moneyDivision.setReceivedMoneyUserId(receivedMoneyUserId);
 
@@ -42,7 +42,7 @@ public class MoneyDivisionRepositoryTest {
         List<MoneyDivision> moneyDivisionList = moneyDivisionRepository.findAll();
         MoneyDivision data = moneyDivisionList.get(0);
 
-        assertThat(data.getMoneyThrowToken()).isEqualTo(moneyThrowToken);
+        assertThat(data.getToken()).isEqualTo(moneyThrowToken);
         assertThat(data.getDividedMoney()).isEqualTo(dividedMoney);
         assertThat(data.getReceivedMoneyUserId()).isEqualTo(receivedMoneyUserId);
 

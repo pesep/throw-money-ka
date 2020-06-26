@@ -4,10 +4,7 @@ import com.kakaopay.homework.service.ThrowMoneyService;
 import com.kakaopay.homework.web.dto.ThrowMoneyRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ThrowMoneyController {
@@ -22,6 +19,16 @@ public class ThrowMoneyController {
             @RequestBody ThrowMoneyRequestDTO throwMoneyRequestDTO) {
 
         return ResponseEntity.ok(throwMoneyService.throwMoney(userId, chatRoomId, throwMoneyRequestDTO));
+
+    }
+
+    @PostMapping("/money/get/{token}")
+    public ResponseEntity<?> getMoney(
+            @RequestHeader(name = "X-USER-ID") String userId,
+            @RequestHeader(name = "X-ROOM-ID") String chatRoomId,
+            @PathVariable String token) {
+
+        return ResponseEntity.ok(throwMoneyService.getThrowMoney(userId, chatRoomId, token));
 
     }
 

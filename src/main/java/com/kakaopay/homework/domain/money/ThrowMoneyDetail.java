@@ -25,12 +25,12 @@ public class ThrowMoneyDetail extends BaseTimeEntity {
 
     private int throwPeople;
 
-    @Type(type = "yes_no")
-    @Column(length = 1, name = "completeYn")
-    @ColumnDefault("'N'")
-    private boolean isComplete;
+//    @Type(type = "yes_no")
+//    @Column(length = 1, name = "completeYn")
+//    @ColumnDefault("'N'")
+//    private boolean isComplete;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "throwMoneyDetail")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "throwMoneyDetail")
     private List<MoneyDivision> moneyDivisionList;
 
 

@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class ThrowUserId implements Serializable {
 
     @Id
-    private String UserId;
+    private String userId;
 
     @Id
-    private String ChatRoomId;
+    private String chatRoomId;
 
 }

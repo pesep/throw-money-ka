@@ -14,14 +14,15 @@ public class MoneyDivision {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-    private String moneyThrowToken;
+    @Column(nullable = false)
+    private String token;
 
     private long dividedMoney;
 
     private String receivedMoneyUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "token", referencedColumnName = "token")
+    @ManyToOne
+    @JoinColumn(name = "throwMoneyDetailToken", referencedColumnName = "token")
     private ThrowMoneyDetail throwMoneyDetail;
 
 }

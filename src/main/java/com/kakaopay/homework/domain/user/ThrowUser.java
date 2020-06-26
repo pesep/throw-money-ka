@@ -15,9 +15,9 @@ import javax.persistence.IdClass;
 public class ThrowUser extends BaseTimeEntity {
 
     @Id
-    private String UserId;
+    private String userId;
 
     @Id
-    private String ChatRoomId;
+    private String chatRoomId;
 
 }
