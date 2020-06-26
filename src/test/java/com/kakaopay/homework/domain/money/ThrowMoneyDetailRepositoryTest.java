@@ -34,7 +34,6 @@ public class ThrowMoneyDetailRepositoryTest {
         String moneyMaker = "king";
         long totalMoney = 10000;
         int throwPeople = 5;
-        boolean isComplete = false;
 
         throwMoneyDetail.setToken(token);
         throwMoneyDetail.setGroupChatId(groupChatId);

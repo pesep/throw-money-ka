@@ -32,4 +32,13 @@ public class ThrowMoneyController {
 
     }
 
+    @GetMapping("/money/get/{token}")
+    public ResponseEntity<?> getThrowMoneyDetail(
+            @RequestHeader(name = "X-USER-ID") String userId,
+            @RequestHeader(name = "X-ROOM-ID") String chatRoomId,
+            @PathVariable String token) {
+
+        return ResponseEntity.ok(throwMoneyService.getThrowMoneyDetail(userId, chatRoomId, token));
+    }
+
 }

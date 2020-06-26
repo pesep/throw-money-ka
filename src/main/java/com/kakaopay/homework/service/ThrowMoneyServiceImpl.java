@@ -8,9 +8,7 @@ import com.kakaopay.homework.domain.user.ThrowUser;
 import com.kakaopay.homework.domain.user.ThrowUserRepository;
 import com.kakaopay.homework.exception.ErrorCode;
 import com.kakaopay.homework.exception.ErrorCodeException;
-import com.kakaopay.homework.web.dto.GetMoneyResponseDTO;
-import com.kakaopay.homework.web.dto.ThrowMoneyRequestDTO;
-import com.kakaopay.homework.web.dto.ThrowMoneyResponseDTO;
+import com.kakaopay.homework.web.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,6 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
         List<MoneyDivision> moneyDivisionList = new ArrayList<>();
 
         long[] divisionMoneyGroup = divisionMoney(people, divisionMoney);
-        Collections.shuffle(Arrays.asList(divisionMoneyGroup));
 
         long max = divisionMoneyGroup[0];
 
@@ -136,6 +133,51 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
         return getMoneyResponseDTO;
     }
 
+    @Override
+    public GetThrowMoneyDetailResponseDTO getThrowMoneyDetail(String userId, String chatRoomId, String token) {
+
+        ThrowMoneyDetail throwMoneyDetail = throwMoneyDetailRepository.findByToken(token);
+
+        // token 유효성 검사
+        if (throwMoneyDetail == null) {
+            throw new ErrorCodeException(ErrorCode.E0006);
+        }
+
+        // 7일 제한
+        LocalDateTime expireDateTime = throwMoneyDetail.getCreatedDate().plusDays(7);
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(expireDateTime)) {
+            throw new ErrorCodeException(ErrorCode.E0001);
+        }
+
+        // 본인만 조회
+        if (!throwMoneyDetail.getMoneyMaker().equals(userId)) {
+            throw new ErrorCodeException(ErrorCode.E0005);
+        }
+
+        GetThrowMoneyDetailResponseDTO getThrowMoneyDetailResponseDTO = new GetThrowMoneyDetailResponseDTO();
+
+        getThrowMoneyDetailResponseDTO.setThrowDateTime(throwMoneyDetail.getCreatedDate());
+        getThrowMoneyDetailResponseDTO.setThrowMoney(throwMoneyDetail.getTotalMoney());
+
+        long receivedMoney = 0;
+        List<MoneyDivisionDTO> moneyDivisionDTOList = new ArrayList<>();
+        for (int i = 0; i < throwMoneyDetail.getMoneyDivisionList().size(); i++) {
+            if (!(throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId() == null)) {
+                receivedMoney += throwMoneyDetail.getMoneyDivisionList().get(i).getDividedMoney();
+
+                MoneyDivisionDTO moneyDivisionDTO = new MoneyDivisionDTO();
+                moneyDivisionDTO.setReceivedMoney(throwMoneyDetail.getMoneyDivisionList().get(i).getDividedMoney());
+                moneyDivisionDTO.setReceivedUserId(throwMoneyDetail.getMoneyDivisionList().get(i).getReceivedMoneyUserId());
+                moneyDivisionDTOList.add(moneyDivisionDTO);
+            }
+        }
+        getThrowMoneyDetailResponseDTO.setReceivedMoney(receivedMoney);
+        getThrowMoneyDetailResponseDTO.setMoneyDivisionDTOList(moneyDivisionDTOList);
+
+        return getThrowMoneyDetailResponseDTO;
+    }
+
     private String createToken() {
 
         return RandomStringUtils.randomAlphanumeric(3);
@@ -162,6 +204,8 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
             divisionMoney -= divisionMoneyGroup[i];
 
         }
+
+        Collections.shuffle(Arrays.asList(divisionMoneyGroup));
 
         return divisionMoneyGroup;
     }

@@ -3,8 +3,7 @@ package com.kakaopay.homework.domain.money;
 import com.kakaopay.homework.domain.BaseTimeEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,6 +30,7 @@ public class ThrowMoneyDetail extends BaseTimeEntity {
 //    private boolean isComplete;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "throwMoneyDetail")
+//    @Where(clause = "received_money_user_id is not null")
     private List<MoneyDivision> moneyDivisionList;
 
 

@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MoneyDivisionRepository extends JpaRepository<MoneyDivision, Long> {
 
-//    MoneyDivision findByUserIdAndToken(String userId, String token);
+    MoneyDivision findByReceivedMoneyUserIdAndToken(String userId, String token);
 
 }
