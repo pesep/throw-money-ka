@@ -92,37 +92,88 @@ public class ThrowMoneyControllerTest {
     // 뿌린 돈 받기 테스트
     @Test
     public void getMoney() {
-        String userId = "paul";
+
+        // 테스트 데이터
         String chatRoomId = RandomStringUtils.randomAlphanumeric(10);
 
-        ThrowUser throwUser = new ThrowUser();
-        throwUser.setUserId(userId);
-        throwUser.setChatRoomId(chatRoomId);
-        throwUserRepository.save(throwUser);
+        List<ThrowUser> throwUserList = new ArrayList<>();
+        ThrowUser throwUser1 = new ThrowUser();
+        throwUser1.setUserId("marduk");
+        throwUser1.setChatRoomId(chatRoomId);
+        throwUserList.add(throwUser1);
 
-        ThrowMoneyRequestDTO requestDTO = new ThrowMoneyRequestDTO();
-        requestDTO.setTotalMoney(1000);
-        requestDTO.setThrowPeople(3);
+        ThrowUser throwUser2 = new ThrowUser();
+        throwUser2.setUserId("josie");
+        throwUser2.setChatRoomId(chatRoomId);
+        throwUserList.add(throwUser2);
 
+        ThrowUser throwUser3 = new ThrowUser();
+        throwUser3.setUserId("katarina");
+        throwUser3.setChatRoomId(chatRoomId);
+        throwUserList.add(throwUser3);
+
+        for (ThrowUser throwUser : throwUserList) {
+            throwUserRepository.save(throwUser);
+        }
+
+        ThrowMoneyDetail throwMoneyDetailData = new ThrowMoneyDetail();
+        throwMoneyDetailData.setToken(RandomStringUtils.randomAlphanumeric(3));
+        throwMoneyDetailData.setThrowPeople(5);
+        throwMoneyDetailData.setTotalMoney(1000);
+        throwMoneyDetailData.setMoneyMaker(throwUser1.getUserId());
+        throwMoneyDetailData.setGroupChatId(chatRoomId);
+        throwMoneyDetailData.setCreatedDate(LocalDateTime.now());
+        throwMoneyDetailData.setModifiedDate(LocalDateTime.now());
+        throwMoneyDetailRepository.save(throwMoneyDetailData);
+
+        List<MoneyDivision> moneyDivisionList = new ArrayList<>();
+        MoneyDivision moneyDivision1 = new MoneyDivision();
+        moneyDivision1.setToken(throwMoneyDetailData.getToken());
+        moneyDivision1.setDividedMoney(553);
+        moneyDivisionList.add(moneyDivision1);
+
+        MoneyDivision moneyDivision2 = new MoneyDivision();
+        moneyDivision2.setToken(throwMoneyDetailData.getToken());
+        moneyDivision2.setDividedMoney(142);
+        moneyDivisionList.add(moneyDivision2);
+
+        MoneyDivision moneyDivision3 = new MoneyDivision();
+        moneyDivision3.setToken(throwMoneyDetailData.getToken());
+        moneyDivision3.setDividedMoney(60);
+        moneyDivisionList.add(moneyDivision3);
+
+        MoneyDivision moneyDivision4 = new MoneyDivision();
+        moneyDivision4.setToken(throwMoneyDetailData.getToken());
+        moneyDivision4.setDividedMoney(212);
+        moneyDivisionList.add(moneyDivision4);
+
+        MoneyDivision moneyDivision5 = new MoneyDivision();
+        moneyDivision5.setToken(throwMoneyDetailData.getToken());
+        moneyDivision5.setDividedMoney(33);
+        moneyDivisionList.add(moneyDivision5);
+
+        for (MoneyDivision data : moneyDivisionList) {
+            moneyDivisionRepository.save(data);
+        }
+
+        throwMoneyDetailData.setMoneyDivisionList(moneyDivisionList);
+        throwMoneyDetailRepository.save(throwMoneyDetailData);
+
+        for (MoneyDivision data : moneyDivisionList) {
+            data.setThrowMoneyDetail(throwMoneyDetailData);
+            moneyDivisionRepository.save(data);
+        }
+
+        String token = throwMoneyDetailData.getToken();
+
+        String userId = "josie";
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-USER-ID", userId);
         headers.set("X-ROOM-ID", chatRoomId);
 
-        HttpEntity<ThrowMoneyRequestDTO> entity = new HttpEntity<>(requestDTO, headers);
-        String url = "http://localhost:" + port + "/money/throw";
-        ResponseEntity<ThrowMoneyResponseDTO> responseEntity = restTemplate.postForEntity(url, entity, ThrowMoneyResponseDTO.class);
-
-        String token = responseEntity.getBody().getToken();
-
-        userId = "josie";
-        throwUser.setUserId(userId);
-        throwUser.setChatRoomId(chatRoomId);
-        throwUserRepository.save(throwUser);
-
-        headers.set("X-USER-ID", userId);
         HttpEntity<?> getMoneyEntity = new HttpEntity<>(headers);
 
-        url = "http://localhost:" + port + "/money/get/" + token;
+        String url = "http://localhost:" + port + "/money/get/" + token;
 
         ResponseEntity<GetMoneyResponseDTO> getResponseEntity = restTemplate.postForEntity(url, getMoneyEntity, GetMoneyResponseDTO.class);
 
@@ -185,8 +236,6 @@ public class ThrowMoneyControllerTest {
             data.setThrowMoneyDetail(throwMoneyDetailData);
             moneyDivisionRepository.save(data);
         }
-
-        List<ThrowMoneyDetail> throwMoneyDetail = throwMoneyDetailRepository.findAll();
 
         String token = throwMoneyDetailData.getToken();
         String userId = throwMoneyDetailData.getMoneyMaker();

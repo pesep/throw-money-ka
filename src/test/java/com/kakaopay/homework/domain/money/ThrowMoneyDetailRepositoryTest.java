@@ -40,7 +40,6 @@ public class ThrowMoneyDetailRepositoryTest {
         throwMoneyDetail.setMoneyMaker(moneyMaker);
         throwMoneyDetail.setTotalMoney(totalMoney);
         throwMoneyDetail.setThrowPeople(throwPeople);
-//        throwMoneyDetail.setComplete(isComplete);
 
         throwMoneyDetailRepository.save(throwMoneyDetail);
 
@@ -52,7 +51,6 @@ public class ThrowMoneyDetailRepositoryTest {
         assertThat(data.getMoneyMaker()).isEqualTo(moneyMaker);
         assertThat(data.getTotalMoney()).isEqualTo(totalMoney);
         assertThat(data.getThrowPeople()).isEqualTo(throwPeople);
-//        assertThat(data.isComplete()).isEqualTo(isComplete);
 
     }
 }

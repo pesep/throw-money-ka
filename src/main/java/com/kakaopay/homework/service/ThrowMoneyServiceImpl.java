@@ -9,7 +9,6 @@ import com.kakaopay.homework.domain.user.ThrowUserRepository;
 import com.kakaopay.homework.exception.ErrorCode;
 import com.kakaopay.homework.exception.ErrorCodeException;
 import com.kakaopay.homework.web.dto.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Slf4j
 @Service
 public class ThrowMoneyServiceImpl implements ThrowMoneyService {
 
@@ -37,6 +35,7 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
     @Override
     public ThrowMoneyResponseDTO throwMoney(String userId, String chatRoomId, ThrowMoneyRequestDTO throwMoneyRequestDTO) {
 
+        // 토큰 생성
         String token = createToken();
 
         long divisionMoney = throwMoneyRequestDTO.getTotalMoney();
@@ -51,6 +50,7 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
 
         List<MoneyDivision> moneyDivisionList = new ArrayList<>();
 
+        // 뿌릴 금액 분배
         long[] divisionMoneyGroup = divisionMoney(people, divisionMoney);
 
         long max = divisionMoneyGroup[0];
@@ -85,6 +85,12 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
     @Override
     public GetMoneyResponseDTO getThrowMoney(String userId, String chatRoomId, String token) {
 
+        // 대화방에 소속 되어 있는지 확인
+        ThrowUser throwUser = throwUserRepository.findByUserIdAndChatRoomId(userId, chatRoomId);
+        if (throwUser == null) {
+            throw new ErrorCodeException(ErrorCode.E0002);
+        }
+
         ThrowMoneyDetail throwMoneyDetail = throwMoneyDetailRepository.findByToken(token);
 
         // 10분 제한
@@ -92,12 +98,6 @@ public class ThrowMoneyServiceImpl implements ThrowMoneyService {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(expireDateTime)) {
             throw new ErrorCodeException(ErrorCode.E0001);
-        }
-
-        // 대화방에 소속 되어 있는지 확인
-        ThrowUser throwUser = throwUserRepository.findByUserIdAndChatRoomId(userId, chatRoomId);
-        if (throwUser == null) {
-            throw new ErrorCodeException(ErrorCode.E0002);
         }
 
         // 뿌린 사람은 가져갈 수 없음
