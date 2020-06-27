@@ -68,7 +68,7 @@ curl --location --request POST 'localhost:8080/money/get/UOB' \
 ### 뿌리기 정보 조회
 #### Request
 ```
-curl --location --request GET 'localhost:8080/money/get/8GK' \
+curl --location --request GET 'localhost:8080/money/get/UOB' \
 --header 'X-USER-ID: king' \
 --header 'X-ROOM-ID: 9shKanauPo'
 ```
