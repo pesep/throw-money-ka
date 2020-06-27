@@ -8,7 +8,7 @@
 
 ### Entity 정의
 #### ThrowMoneyDetail
-돈을 뿌린 일반적인 정보들을 나타냅니다.
+돈 뿌리기의 일반적인 정보들을 나타냅니다.
 - `ThrowMoneyDetail`과 `MoneyDivision`은 1:N 관계로 이루어져있습니다.
 
 #### MoneyDivision
